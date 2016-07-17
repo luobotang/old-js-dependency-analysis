@@ -4,7 +4,27 @@
 	<meta charset="UTF-8">
 	<title>文件依赖关系分析</title>
 <style>
-* {margin: 0; padding: 0; box-sizing: border-box;}
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font: 14px/1.7 consolas, "Microsoft Yahei", sans-serif;
+	color: #333;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+::-webkit-scrollbar-track {
+	background: rgba(255,255,255,0.5);
+}
+::-webkit-scrollbar-thumb {
+	background: #999;
+	border-radius: 4px;
+}
 
 .row {
 	display: flex;
@@ -16,29 +36,91 @@
 	width: 50%;
 }
 
+.main-container {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+
 #results {
 	width: 100%;
+	height: 100%;
 	min-height: 300px;
 	padding: 20px;
 	line-height: 1em;
 	font-family: consolas, monospace;
+	outline: none;
+	box-shadow: inset 0 0 20px #999;
+	resize: none;
 }
 
 .results-container {
+	height: 100%;
 	padding: 20px;
 	background: rgba(255,255,255,0.5);
-	/*box-shadow: inset 0 0 20px #999;*/
+	box-shadow: inset 0 0 20px #999;
+	overflow: auto;
+}
+
+.result {
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px dashed #e5e5e5;
+}
+.result:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: 0 none;
+}
+
+.result a:target {
+	color: red;
+	font-weight: bold;
+}
+
+.required-files-count {
+	margin-left: 10px;
+	color: #999;
 }
 
 .require-files {
 	padding: 0 20px;
 }
+
+.result .require-files {
+	display: none;
+}
+
+.result.result-detail-show .require-files {
+	display: block;
+}
+
+.btn-render {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	width: 40px;
+	margin-left: -20px;
+	line-height: 30px;
+	z-index: 10;
+	border-radius: 0 0 20px 20px;
+	border: 0 none;
+	background: #f0f0f0;
+	box-shadow: 0 0 20px #999;
+	outline: none;
+	cursor: pointer;
+}
+.btn-render:hover {
+	background: #ddd;
+}
 </style>
 </head>
 <body>
 
-	<button class="btn-render">显示结果</button>
-	<div class="row">
+	<button class="btn-render">=&gt;</button>
+	<div class="row main-container">
 		<div class="col col-1-2">
 			<textarea id="results" placeholder="将分析结果数据粘贴到这里..."></textarea>
 		</div>
@@ -51,31 +133,90 @@
 
 <script>
 window.addEventListener('DOMContentLoaded', function (e) {
-	document.querySelector('.btn-render').addEventListener('click', function () {
-		var results = JSON.parse(document.querySelector('#results').value)
-		document.querySelector('.results-box').innerHTML = renderResults(results)
-	})
 
-	function renderResults(results) {
-		return results.map(renderResult).join('<br>')
+	function getResults() {
+		try {
+			return JSON.parse(document.querySelector('#results').value)
+		} catch (e) {
+			return null
+		}
 	}
 
-	function renderResult(result) {
+	function ResultsView(el) {
+		this.el = el || document.querySelector('.results-container')
+		this.initEvents()
+	}
+
+	ResultsView.prototype.initEvents = function () {
+		this.el.addEventListener('click', function (e) {
+			if (e.target.tagName === 'A' && e.target.href) {
+				// do nothing
+			} else {
+				var elResult = findClosest(e.target, '.result')
+				if (elResult) {
+					elResult.classList.toggle('result-detail-show')
+				}
+			}
+		})
+	}
+
+	ResultsView.prototype.setResults = function (results) {
+		this.el.querySelector('.results-box').innerHTML = this.renderResults(results)
+	}
+
+	ResultsView.prototype.renderResults = function (results) {
+		return results.map(this.renderResult, this).join('')
+	}
+
+	ResultsView.prototype.renderResult = function (result) {
+		var requiredFilesCount = result.requireFiles.length
 		return (
 		'<div class="result">' +
-			'<a>' + result.file + '</a>' +
+			'<a id="file_' + this.fileNameToAchorName(result.file) + '">' + result.file + '</a>' +
+			'<span class="required-files-count">(' + requiredFilesCount + ')</span>' +
 			(
-			result.requireFiles.length ?
+			requiredFilesCount ?
 			'<ul class="require-files">' +
 				result.requireFiles.map(function (file) {
-					return '<li>' + file + '</li>'
-				}).join('') +
+					return (
+					'<li>' +
+						'<a href="#file_' + this.fileNameToAchorName(file) + '">' + file + '</a>' +
+					'</li>'
+					)
+				}, this).join('') +
 			'</ul>' :
 			''
 			) +
 		'</div>'
 		)
 	}
+
+	ResultsView.prototype.fileNameToAchorName = function (fileName) {
+		return fileName.replace(/\\/g, '_').replace(/\.js$/, '')
+	}
+
+	/* helpers */
+
+	function findClosest(el, selector) {
+		while (el) {
+			if (el.matches && el.matches(selector)) {
+				return el
+			}
+			el = el.parentNode
+		}
+		return null
+	}
+
+	/* main */
+
+	var resultView = new ResultsView()
+
+	document.querySelector('.btn-render').addEventListener('click', function () {
+		var results = getResults()
+		if (results) {
+			resultView.setResults(results)
+		}
+	})
 
 }, false)
 </script>
