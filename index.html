@@ -80,21 +80,26 @@ body {
 	font-weight: bold;
 }
 
-.required-files-count {
+.result .count {
 	margin-left: 10px;
 	color: #999;
 }
 
-.require-files {
-	padding: 0 20px;
-}
-
-.result .require-files {
+.result .result-detail-item {
 	display: none;
 }
 
-.result.result-detail-show .require-files {
+.result.result-detail-show .result-detail-item {
 	display: block;
+}
+
+.result-detail-item ul {
+	padding: 0 20px;
+}
+
+.result-detail-item .label {
+	margin-right: 10px;
+	color: #99f;
 }
 
 .btn-render {
@@ -170,21 +175,54 @@ window.addEventListener('DOMContentLoaded', function (e) {
 
 	ResultsView.prototype.renderResult = function (result) {
 		var requiredFilesCount = result.requireFiles.length
+		var requireVarsCount = result.requireVars.length
+		var defineVarsCount = result.defineVars.length
+		var unresolvedVarsCount = result.unresolvedVars.length
 		return (
 		'<div class="result">' +
 			'<a id="file_' + this.fileNameToAchorName(result.file) + '">' + result.file + '</a>' +
-			'<span class="required-files-count">(' + requiredFilesCount + ')</span>' +
+			'<span class="count">' +
+				'(' +
+				requiredFilesCount + ', ' +
+				requireVarsCount + ', ' +
+				defineVarsCount +
+				')' +
+			'</span>' +
+			(
+			requireVarsCount ?
+			'<div class="result-detail-item">' +
+				'<span class="label">require vars:</span>' +
+				result.requireVars.join(', ') +
+			'</div>' : ''
+			) +
+			(
+			defineVarsCount ?
+			'<div class="result-detail-item">' +
+				'<span class="label">define vars:</span>' +
+				result.defineVars.join(', ') +
+			'</div>' : ''
+			) +
+			(
+			unresolvedVarsCount ?
+			'<div class="result-detail-item">' +
+				'<span class="label">unresolved vars:</span>' +
+				result.unresolvedVars.join(', ') +
+			'</div>' : ''
+			) +
 			(
 			requiredFilesCount ?
-			'<ul class="require-files">' +
-				result.requireFiles.map(function (file) {
-					return (
-					'<li>' +
-						'<a href="#file_' + this.fileNameToAchorName(file) + '">' + file + '</a>' +
-					'</li>'
-					)
-				}, this).join('') +
-			'</ul>' :
+			'<div class="result-detail-item">' +
+				'<span class="label">required files:</span>' +
+				'<ul>' +
+					result.requireFiles.map(function (file) {
+						return (
+						'<li>' +
+							'<a href="#file_' + this.fileNameToAchorName(file) + '">' + file + '</a>' +
+						'</li>'
+						)
+					}, this).join('') +
+				'</ul>' +
+			'</div>':
 			''
 			) +
 		'</div>'
