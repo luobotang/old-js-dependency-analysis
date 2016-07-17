@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>文件依赖关系分析</title>
+<style>
+* {margin: 0; padding: 0; box-sizing: border-box;}
+
+.row {
+	display: flex;
+}
+.row .col {
+	flex: auto;
+}
+.col-1-2 {
+	width: 50%;
+}
+
+#results {
+	width: 100%;
+	min-height: 300px;
+	padding: 20px;
+	line-height: 1em;
+	font-family: consolas, monospace;
+}
+
+.results-container {
+	padding: 20px;
+	background: rgba(255,255,255,0.5);
+	/*box-shadow: inset 0 0 20px #999;*/
+}
+
+.require-files {
+	padding: 0 20px;
+}
+</style>
+</head>
+<body>
+
+	<button class="btn-render">显示结果</button>
+	<div class="row">
+		<div class="col col-1-2">
+			<textarea id="results" placeholder="将分析结果数据粘贴到这里..."></textarea>
+		</div>
+		<div class="col col-1-2">
+			<div class="results-container">
+				<div class="results-box"></div>
+			</div>
+		</div>
+	</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function (e) {
+	document.querySelector('.btn-render').addEventListener('click', function () {
+		var results = JSON.parse(document.querySelector('#results').value)
+		document.querySelector('.results-box').innerHTML = renderResults(results)
+	})
+
+	function renderResults(results) {
+		return results.map(renderResult).join('<br>')
+	}
+
+	function renderResult(result) {
+		return (
+		'<div class="result">' +
+			'<a>' + result.file + '</a>' +
+			(
+			result.requireFiles.length ?
+			'<ul class="require-files">' +
+				result.requireFiles.map(function (file) {
+					return '<li>' + file + '</li>'
+				}).join('') +
+			'</ul>' :
+			''
+			) +
+		'</div>'
+		)
+	}
+
+}, false)
+</script>
+</body>
+</html>

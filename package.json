@@ -1,0 +1,23 @@
+{
+  "name": "old-js-dependency-analysis",
+  "version": "0.1.0",
+  "description": "分析基于全局变量方式进行模块拆分的老代码的文件模块依赖关系",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luobotang/old-js-dependency-analysis.git"
+  },
+  "author": "luobotang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/luobotang/old-js-dependency-analysis/issues"
+  },
+  "homepage": "https://github.com/luobotang/old-js-dependency-analysis#readme",
+  "dependencies": {
+    "escope": "^3.6.0",
+    "esprima": "^2.7.2"
+  }
+}
