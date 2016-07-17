@@ -46,7 +46,10 @@ EventUtil.addEvent(document.getElementById('btnSubmit'), 'click', function () {
 
 ## 用法
 
-TODO
+示例：
+```hash
+node index test
+```
 
 ## 测试
 
