@@ -111,6 +111,8 @@ node index test
 ]
 ```
 
+可以使用 ```index.html``` 查看结果数据。
+
 ## 测试
 
 ```hash
