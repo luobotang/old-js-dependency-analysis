@@ -33,6 +33,10 @@ body {
 	cursor: default;
 }
 
+.result {
+	padding: 0 20px;
+}
+
 .result a:target {
 	color: red;
 	font-weight: bold;
@@ -43,11 +47,11 @@ body {
 	color: #999;
 }
 
-.result .result-detail-item {
+.result .result__body {
 	display: none;
 }
 
-.result.result-detail-show .result-detail-item {
+.result.result-detail-show .result__body {
 	display: block;
 }
 
@@ -81,5 +85,43 @@ body {
 	font-weight: bold;
 }
 .result-group__body {
+	/*padding: 0 20px;*/
+}
+
+.result-group.hide-result-group-body .result-group__body {
+	display: none;
+}
+
+.result-vars {
 	padding: 0 20px;
+}
+
+.var-search-container {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 50%;
+	background: rgba(255,255,255,0.5);
+	max-height: 100%;
+	overflow: auto;
+}
+
+.var-search-container input {
+	display: block;
+	width: 100%;
+	padding: 0 10px;
+	line-height: 2;
+	border: 0 none;
+	outline: none;
+}
+.var-search-container .matched-vars {
+	padding: 0 10px;
+	list-style: none;
+	font-size: 12px;
+}
+.var-search-container .matched-vars li {
+	border-bottom: 1px solid #e5e5e5;
+}
+.var-search-container .matched-vars li.message {
+	color: #999;
 }

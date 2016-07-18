@@ -4,7 +4,7 @@
   "description": "分析基于全局变量方式进行模块拆分的老代码的文件模块依赖关系",
   "main": "index.js",
   "scripts": {
-    "test": "node index test"
+    "test": "node index test && start out/results.html"
   },
   "repository": {
     "type": "git",

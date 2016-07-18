@@ -23,11 +23,11 @@ if (root) {
   }
   options = Object.assign({}, DEFAULT_OPTIONS, options)
   var results = analyzeAllJsFile(root, options)
-  link(results)
+  var linkResult = link(results)
   if (options.out === 'html') {
-    fs.writeFileSync('out/results.html', renderer.renderHTML(results))
+    fs.writeFileSync('out/results.html', renderer.renderHTML(linkResult))
   } else if (options.out === 'json') {
-    fs.writeFileSync('out/results.json', renderer.renderJSON(results))
+    fs.writeFileSync('out/results.json', renderer.renderJSON(linkResult))
   } else {
     console.log(results)
   }

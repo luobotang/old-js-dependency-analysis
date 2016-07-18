@@ -51,6 +51,8 @@ EventUtil.addEvent(document.getElementById('btnSubmit'), 'click', function () {
 node index test
 ```
 
+分析结果在 ```out/results.html``` 中。
+
 ## 测试
 
 ```hash
