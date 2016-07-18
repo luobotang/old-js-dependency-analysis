@@ -26,8 +26,10 @@ if (root) {
   link(results)
   if (options.out === 'html') {
     fs.writeFileSync('out/results.html', renderer.renderHTML(results))
-  } else {
+  } else if (options.out === 'json') {
     fs.writeFileSync('out/results.json', renderer.renderJSON(results))
+  } else {
+    console.log(results)
   }
 } else {
   console.error('require root path')
@@ -53,7 +55,7 @@ function analyzeAllJsFile(root, options) {
       } else if (stats.isFile()) {
         if (
           path.extname(filePath) === '.js' &&
-          (maxFileSize > 0 && stats.size / 1024 < maxFileSize)
+          (maxFileSize === 0 || stats.size / 1024 < maxFileSize)
         ) {
           try {
             ret.push(analyze(fs.readFileSync(filePath), filePath))

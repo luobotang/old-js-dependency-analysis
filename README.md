@@ -51,68 +51,6 @@ EventUtil.addEvent(document.getElementById('btnSubmit'), 'click', function () {
 node index test
 ```
 
-输出：
-```javascript
-[
-  {
-    "file": "test\\app.js",
-    "defineVars": [
-      "tmp"
-    ],
-    "requireVars": [
-      "modA",
-      "modB",
-      "numA",
-      "numB",
-      "strB"
-    ],
-    "requireFiles": [
-      "test\\modA.js",
-      "test\\modB.js"
-    ],
-    "unresolvedVars": []
-  },
-  {
-    "file": "test\\modA.js",
-    "defineVars": [
-      "modA",
-      "numA"
-    ],
-    "requireVars": [
-      "$gid",
-      "addEvent"
-    ],
-    "requireFiles": [
-      "test\\module\\base.js"
-    ],
-    "unresolvedVars": []
-  },
-  {
-    "file": "test\\modB.js",
-    "defineVars": [
-      "modB",
-      "numB",
-      "strB"
-    ],
-    "requireVars": [],
-    "requireFiles": [],
-    "unresolvedVars": []
-  },
-  {
-    "file": "test\\module\\base.js",
-    "defineVars": [
-      "$gid",
-      "addEvent"
-    ],
-    "requireVars": [],
-    "requireFiles": [],
-    "unresolvedVars": []
-  }
-]
-```
-
-可以使用 ```index.html``` 查看结果数据。
-
 ## 测试
 
 ```hash
